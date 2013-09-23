@@ -1,6 +1,7 @@
 g_lastSaved = -1;
 
 
+
 function MessagePanel(message)
 {
 	this.message = message;
@@ -19,11 +20,12 @@ function MessagePanel(message)
 			});
 		var inputId = this.message.createId("input");
 		elementById(messageId).append(createElement("input", {id:inputId, style:"display: none;"}));
-		elementById(inputId).blur(function(){handleEdit(this.message);});
+		var outer = this;
+		elementById(inputId).blur(function(){outer.handleEdit(message);});
         elementById(inputId).keydown(function(event){
             if (event.which == 13)
             {
-                handleEdit(this.message);
+                outer.handleEdit(message);
             }
         });
         var successIconId = this.message.createId("successIconSpan");
@@ -65,10 +67,10 @@ function MessagePanel(message)
 		var newText = elementById(inputId).val();
 		var spanId = message.createId("span");
 		elementById(spanId).text(newText).css('display', '');
-		message.message = newText;
-		editBookmark(message, function() {
+		message.text = newText;
+		editMessage(message, function() {
 			g_lastSaved = message.id;
-			readBookmarks(onRefreshSuccess);
+			readMessages(onRefreshSuccess);
 		});
 	};
 }
