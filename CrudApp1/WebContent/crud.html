@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Twitter Manager</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script type="text/javascript" src="scripts/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script type="text/javascript" src="scripts/message.js"></script>
+<script type="text/javascript" src="scripts/rest.js"></script>
+<script type="text/javascript" src="scripts/ui.js"></script>
+<script type="text/javascript" src="scripts/message_panel.js"></script>
+
+<style>
+ 	#messageList { list-style-type: none; margin: 0; padding: 0;}
+    #messageList li { margin: 10px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+</style>
+
+</head>
+<body>
+	<script>
+		function onRefreshSuccess(data)
+		{
+			messages = {};
+			$("#messageList").empty();
+		    $(data).find("message").each(function(i) 
+    		{
+    		    var message = new Message();
+				message.fromXMLPayload($(this));
+				messages[message.id] = message;
+
+				var messageId = message.createId("li");
+				var panel = new MessagePanel(message);
+				panel.createContents("messageList", message);
+            });
+        }
+
+		function onAdd() {
+			var message = new Message();
+			message.text = "New Message";
+			addMessage(message, function() {
+				readMessages(onRefreshSuccess);
+			});
+		}
+		function onRefresh() {
+			readMessages(onRefreshSuccess);
+		}
+		function onDelete(id) {
+			removeMessage(id, function() {
+				readMessages(onRefreshSuccess);
+			});
+		}
+		function onTweet(bookmark) {
+		    tweetMessage(bookmark, function() {
+		        readMessages(onRefreshSuccess);
+		    });
+		}
+	</script>
+
+    <button onclick="onRefresh()">Refresh</button>
+    <button onclick="onAdd()">Add</button>
+
+	<div id="bookmarkTable">
+		<ol id="messageList">
+		</ol>
+		
+	</div>
+</body>
+</html>

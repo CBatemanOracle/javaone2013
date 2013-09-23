@@ -1,91 +1,58 @@
-BookmarkEntityRESTUrl = "/HRRestWeb/jaxrs/service.BookmarkEntityREST";
+MessageEntityRESTUrl = "/CrudApp1/jaxrs/services.MessageEntityREST";
 
-function createPayload(bookmark)
-{
-	var payload = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><bookmark>";
-	if (bookmark.id)
-	{
-		payload += ("<id>"+bookmark.id+"</id>");
-	}
-	payload += "<tweetid>"+(bookmark.tweetId ? bookmark.tweetId : "-1") +"</tweetid>";
-	if (bookmark.message)
-	{
-		payload += ("<message>"+bookmark.message+"</message>");
-	}
-		
-	//payload += ("<lastsave>0</lastsave>");
-	payload += "</bookmark>";
-	return payload;
-}
-
-function unmarshall(bookmarkElem)
-{
-	var bookmark = new Object();
-	bookmark.id = bookmarkElem.find("id").first().text();
-	bookmark.tweetId = bookmarkElem.find("tweetid").first().text();
-	bookmark.message = bookmarkElem.find("message").first().text();
-	bookmark.lastsave = new Date(bookmarkElem.find("lastsave").first().text());
-	
-	bookmark.createId = function(prefix)
-	{
-		return prefix + this.id;
-	};
-	
-	return bookmark;
-}
-
-function readBookmarks(callback)
+function readMessages(callback)
 {
 	$.ajax({
 		type: "GET",
-		url: BookmarkEntityRESTUrl,
+		url: MessageEntityRESTUrl,
 		success : function(data){callback(data);}
 		}
 	);
 }
 
 
-function addBookmark(bookmark, callback)
+function addMessage(message, callback)
 {
-	var payload = createPayload(bookmark);
+	var payload = message.toXMLPayload();
 
 	$.ajax({
 		contentType: "application/xml",
 		type: "POST",
-		url: BookmarkEntityRESTUrl,
+		url: MessageEntityRESTUrl,
 		data:payload,
 		success:function(data){callback(data);}
 		}
 	);
 }
 
-function editBookmark(bookmark, callback)
+function editMessage(message, callback)
 {
-	var payload = createPayload(bookmark);
+	var payload = message.toXMLPayload(message);
 	
 	$.ajax({
 		contentType: "application/xml",
 		type: "PUT",
-		url: BookmarkEntityRESTUrl,
+		url: MessageEntityRESTUrl,
 		data:payload,
 		success:function(data){callback(data);}
 		}
 	);
 }
 
-function removeBookmark(id, callback)
+
+function removeMessage(id, callback)
 {
 	$.ajax({
 		contentType: "application/xml",
 		type: "DELETE",
-		url: BookmarkEntityRESTUrl+"/"+id,
+		url: MessageEntityRESTUrl+"/"+id,
 		success:function(data){callback(data);}
 		}
 	);
 }
-function tweetBookmark(bookmark, callback)
+function tweetMessage(message, callback)
 {
-	var payload = createPayload(bookmark);
+	var payload = message.toXMLPayload();
 	$.ajax({
 		contentType: "application/xml",
 		type: "PUT",

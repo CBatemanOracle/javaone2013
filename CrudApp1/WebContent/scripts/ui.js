@@ -1,7 +1,4 @@
-g_lastSaved = -1;
-
-}function elementById(id)
-
+function elementById(id)
 {
 	return $("#"+id);
 }
@@ -36,16 +33,4 @@ function formatDate(date)
 		((hours < 10 ? "0" : "")+ hours) +":"+
 		((minutes < 10 ? "0" : "") + minutes)+":"+
 		((seconds < 10 ? "0" : "") + seconds);
-}
-
-function handleEdit(bookmark) {
-	var inputId = bookmark.createId("input");
-	elementById(inputId).css('display', 'none');
-	var newText = elementById(inputId).val();
-	var spanId = bookmark.createId("span");
-	elementById(spanId).text(newText).css('display', '');
-	bookmark.message = newText;
-	editBookmark(bookmark, function() {
-			 g_lastSaved = bookmark.id;
-             readBookmarks(onRefreshSuccess);
-    });
+}	
