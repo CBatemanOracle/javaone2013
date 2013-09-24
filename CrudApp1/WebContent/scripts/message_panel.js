@@ -92,10 +92,11 @@ function MessagePanel(message)
 			    src : "icons/remove.png"}));
 			
 			var tweetId = this.message.createId("tweetIcon");
+			var outer = this;
 			elementById(listItem.elementId).append(createElement("span",{
 			   id : tweetId}));
 			elementById(tweetId).click(function(){
-			   onTweet(this.message);
+			   onTweet(outer.message);
 			});
 			elementById(tweetId).append(createElement("img", {
 			   alt : "Tweet", src:"https://twitter.com/images/b2_btn_icon.gif"}));

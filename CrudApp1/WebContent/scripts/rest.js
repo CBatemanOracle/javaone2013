@@ -1,4 +1,6 @@
-MessageEntityRESTUrl = "/CrudApp1/jaxrs/services.MessageEntityREST";
+RestPath = "/CrudApp1/jaxrs";
+MessageEntityRESTUrl = RestPath+ "/service.MessageEntityREST";
+TwitterEntityRESTUrl = RestPath+"/TwitterService";
 
 function readMessages(callback)
 {
@@ -56,7 +58,7 @@ function tweetMessage(message, callback)
 	$.ajax({
 		contentType: "application/xml",
 		type: "PUT",
-		url: "/HRRestWeb/jaxrs/TwitterService",
+		url: TwitterEntityRESTUrl,
 		data: payload,
 		success:function(data){callback(data);}
 	}
